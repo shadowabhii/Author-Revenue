@@ -6,8 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+
+import com.revenue.model.Transaction;
+import com.revenue.service.FinancialServicesImpl;
+import com.revenue.service.IFinancialServices;
 
 
 
@@ -17,6 +24,9 @@ public class RevenueController {
 	
 	@Autowired
 	RestTemplate restTemplate;
+	
+	@Autowired
+	private IFinancialServices financialServices;
 	
 	@GetMapping("/revenue/{author}")
 	public Double getTotalRevenue(@PathVariable("author") String author) {
@@ -30,6 +40,13 @@ public class RevenueController {
 		// List.class);
 
 		return totalPrice;
+	}
+	
+	@PostMapping("/transaction")
+	public Integer bookPurchasedTransaction(@RequestBody Transaction transaction) {
+
+		Integer id = financialServices.bookPurchased(transaction);
+		return id;
 	}
 
 }
